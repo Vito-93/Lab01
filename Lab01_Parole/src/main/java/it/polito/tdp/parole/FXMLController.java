@@ -12,35 +12,84 @@ import javafx.scene.control.TextField;
 
 public class FXMLController {
 	
-	Parole elenco ;
+	Parole elenco;
 
-    @FXML
+    @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
-    @FXML
+    @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
 
-    @FXML
-    private TextField txtParola;
+    @FXML // fx:id="btnCancella"
+    private Button btnCancella; // Value injected by FXMLLoader
+
+    @FXML // fx:id="btnInserisci"
+    private Button btnInserisci; // Value injected by FXMLLoader
+
+    @FXML // fx:id="btnReset"
+    private Button btnReset; // Value injected by FXMLLoader
+
+    @FXML // fx:id="txtParola"
+    private TextField txtParola; // Value injected by FXMLLoader
+
+    @FXML // fx:id="txtPerformance"
+    private TextField txtPerformance; // Value injected by FXMLLoader
+
+    @FXML // fx:id="txtResult"
+    private TextArea txtResult; // Value injected by FXMLLoader
 
     @FXML
-    private Button btnInserisci;
+    void doCancella(ActionEvent event) {
+        String temp = txtResult.getSelectedText();
+        double start = System.nanoTime();
+        elenco.removeParola(temp);
+        double end = System.nanoTime();
 
-    @FXML
-    private TextArea txtResult;
 
-    @FXML
-    private Button btnReset;
+        //Stampare elenco parole
+        String result = "";
+        for(String s: elenco.getElenco()){
+            result += s + "\n";
+        }
+
+        txtResult.setText(result);
+        txtPerformance.setText("Tempo di esecuzione: "+ (end-start)/1e9 + " secondi.");
+
+
+    }
 
     @FXML
     void doInsert(ActionEvent event) {
-    	// TODO
+        String temp = txtParola.getText();
+        double start = System.nanoTime();
+        elenco.addParola(temp);
+        double end = System.nanoTime();
+        txtResult.clear();
+        txtParola.clear();
+
+        //Stampare elenco parole
+        String result = "";
+        for(String s: elenco.getElenco()){
+            result += s + "\n";
+        }
+
+        txtResult.setText(result);
+        txtPerformance.setText("Tempo di esecuzione: "+ (end-start)/1e9 + " secondi.");
+
+
     }
 
     @FXML
     void doReset(ActionEvent event) {
-    	// TODO
+        double start = System.nanoTime();
+        elenco.reset();
+        double end = System.nanoTime();
+        txtResult.clear();
+        txtPerformance.setText("Tempo di esecuzione: "+ (end-start)/1e9 + " secondi.");
+
+
     }
+
 
     @FXML
     void initialize() {
